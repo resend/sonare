@@ -1,0 +1,60 @@
+{
+  "name": "sonare",
+  "version": "0.0.1",
+  "description": "Pronounceable and organic words that feel natural.",
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "files": [
+    "dist",
+    "readme.md"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "prepublishOnly": "pnpm run build",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "bench": "vitest bench --run benchmarks",
+    "bench:watch": "vitest bench benchmarks",
+    "lint": "biome check --write",
+    "format": "biome format --write"
+  },
+  "keywords": [
+    "random",
+    "unique",
+    "natural",
+    "generator",
+    "pronounceable",
+    "organic",
+    "words"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/resend/sonare.git"
+  },
+  "author": "Bu Kinoshita <bukinoshita@gmail.com",
+  "bugs": {
+    "url": "https://github.com/resend/sonare/issues"
+  },
+  "homepage": "https://github.com/resend/sonare#readme",
+  "license": "MIT",
+  "devDependencies": {
+    "@biomejs/biome": "2.3.2",
+    "tsup": "8.5.0",
+    "typescript": "5.9.3",
+    "vitest": "4.0.6"
+  },
+  "packageManager": "pnpm@10.18.2"
+}
