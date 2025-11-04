@@ -4,7 +4,7 @@
 
 A lightweight library that generates unique, pronounceable and organic words that feel natural.
 
-- **Highly Unique**: >98.9% uniqueness even when generating 1 million words
+- **Highly Unique**: >85% uniqueness even when generating 1 million words
 - **Pronounceable**: Uses phoneme-based generation for easy-to-say words
 - **Customizable**: Configure minimum and maximum word length
 - **Lightweight**: Zero dependencies
@@ -69,7 +69,7 @@ Generates a single pronounceable word.
 
 **Returns:**
 
-- `string`: A pronounceable word containing only lowercase alphanumeric characters
+- `string`: A pronounceable word containing only lowercase letters
 
 **Example:**
 

@@ -1,5 +1,5 @@
 {
-  "name": "sonare",
+  "name": "@resend/sonare",
   "version": "0.0.1",
   "description": "Pronounceable and organic words that feel natural.",
   "main": "dist/index.cjs",

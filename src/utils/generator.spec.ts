@@ -44,13 +44,13 @@ describe('generator', () => {
       expect(name1).not.toBe(name2);
     });
 
-    it('generates only lowercase alphanumeric characters', () => {
+    it('generates only lowercase letters', () => {
       const rng = createRng(555);
       const config = { minLength: 6, maxLength: 10 };
 
       for (let i = 0; i < 100; i++) {
         const [name] = generateName(rng, config);
-        expect(/^[a-z0-9]+$/.test(name)).toBe(true);
+        expect(/^[a-z]+$/.test(name)).toBe(true);
       }
     });
 
@@ -96,65 +96,6 @@ describe('generator', () => {
       expect(name.length).toBe(10);
     });
 
-    it('sometimes includes numbers', () => {
-      const config = { minLength: 6, maxLength: 10 };
-      let hasNumber = false;
-
-      for (let i = 0; i < 100; i++) {
-        const rng = createRng(i);
-        const [name] = generateName(rng, config);
-        if (/\d/.test(name)) {
-          hasNumber = true;
-          break;
-        }
-      }
-
-      expect(hasNumber).toBe(true);
-    });
-
-    it('generates some names with numbers', () => {
-      const config = { minLength: 6, maxLength: 10 };
-      let withNumbers = 0;
-      const iterations = 1000;
-
-      for (let i = 0; i < iterations; i++) {
-        const rng = createRng(i);
-        const [name] = generateName(rng, config);
-        if (/\d/.test(name)) {
-          withNumbers++;
-        }
-      }
-
-      const ratio = withNumbers / iterations;
-      expect(ratio).toBeGreaterThan(0);
-      expect(ratio).toBeLessThan(1);
-    });
-
-    it('can append numbers when conditions are met', () => {
-      const config = { minLength: 6, maxLength: 15 };
-      const namesWithNumbers = new Set<string>();
-
-      for (let i = 0; i < 10000; i++) {
-        const rng = createRng(i * 1000);
-        const [name] = generateName(rng, config);
-        if (/\d+$/.test(name)) {
-          namesWithNumbers.add(name);
-        }
-      }
-
-      expect(namesWithNumbers.size).toBeGreaterThan(0);
-    });
-
-    it('truncates to maxLength when number is appended', () => {
-      const config = { minLength: 6, maxLength: 10 };
-
-      for (let i = 0; i < 1000; i++) {
-        const rng = createRng(i * 100);
-        const [name] = generateName(rng, config);
-        expect(name.length).toBeLessThanOrEqual(10);
-      }
-    });
-
     it('generates diverse names', () => {
       const config = { minLength: 6, maxLength: 10 };
       const names = new Set<string>();
@@ -197,7 +138,7 @@ describe('generator', () => {
       const config = { minLength: 6, maxLength: 10 };
       const [name] = generateName(rng, config);
 
-      expect(/^[a-z0-9]+$/.test(name)).toBe(true);
+      expect(/^[a-z]+$/.test(name)).toBe(true);
       expect(name).toBe(name.toLowerCase());
     });
 

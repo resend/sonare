@@ -25,9 +25,9 @@ describe('sonare', () => {
     expect(longWord.length).toBeLessThanOrEqual(15);
   });
 
-  it('generates words with only lowercase alphanumeric characters', () => {
+  it('generates words with only lowercase letters', () => {
     const words = Array.from({ length: 100 }, () => sonare());
-    const allValid = words.every((word) => /^[a-z0-9]+$/.test(word));
+    const allValid = words.every((word) => /^[a-z]+$/.test(word));
     expect(allValid).toBe(true);
   });
 
@@ -37,9 +37,9 @@ describe('sonare', () => {
     expect(uniqueWords.size).toBeGreaterThan(990);
   });
 
-  it('generates 1M words with very high uniqueness (>98.9%)', () => {
+  it('generates 1M words with high uniqueness (>85%)', () => {
     const words = Array.from({ length: 1000000 }, () => sonare());
     const uniqueWords = new Set(words);
-    expect(uniqueWords.size).toBeGreaterThan(989000);
+    expect(uniqueWords.size).toBeGreaterThan(850000);
   });
 });

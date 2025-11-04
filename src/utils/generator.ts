@@ -15,16 +15,7 @@ export function generateName(
 ): readonly [string, RandomGenerator] {
   const [pattern, rng1] = weightedPick(PATTERNS, WEIGHTS, rng);
   const [base, rng2] = buildPattern(pattern, rng1);
-  const [shouldAddNumber, rng3] = rng2.next();
+  const baseWord = padToLength(normalize(base), cfg.minLength, cfg.maxLength, rng2);
 
-  const baseWord = padToLength(normalize(base), cfg.minLength, cfg.maxLength, rng3);
-
-  if (shouldAddNumber < 0.98 && baseWord.length < cfg.maxLength) {
-    const [numVal, rng4] = rng3.next();
-    const number = Math.floor(numVal * 10000000);
-    const wordWithNumber = `${baseWord}${number}`;
-    return [wordWithNumber.slice(0, cfg.maxLength), rng4];
-  }
-
-  return [baseWord, rng3];
+  return [baseWord, rng2];
 }
