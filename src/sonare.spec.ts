@@ -42,4 +42,38 @@ describe('sonare', () => {
     const uniqueWords = new Set(words);
     expect(uniqueWords.size).toBeGreaterThan(850000);
   });
+
+  describe('option validation', () => {
+    it('throws TypeError for Infinity minLength', () => {
+      expect(() => sonare({ minLength: Infinity })).toThrow(TypeError);
+    });
+
+    it('throws TypeError for NaN minLength', () => {
+      expect(() => sonare({ minLength: NaN })).toThrow(TypeError);
+    });
+
+    it('throws TypeError for non-integer minLength', () => {
+      expect(() => sonare({ minLength: 1.5 })).toThrow(TypeError);
+    });
+
+    it('throws TypeError for non-integer maxLength', () => {
+      expect(() => sonare({ maxLength: 10.5 })).toThrow(TypeError);
+    });
+
+    it('throws RangeError for negative minLength', () => {
+      expect(() => sonare({ minLength: -1 })).toThrow(RangeError);
+    });
+
+    it('throws RangeError for zero minLength', () => {
+      expect(() => sonare({ minLength: 0 })).toThrow(RangeError);
+    });
+
+    it('throws RangeError when minLength > maxLength', () => {
+      expect(() => sonare({ minLength: 12, maxLength: 8 })).toThrow(RangeError);
+    });
+
+    it('throws RangeError when maxLength > 256', () => {
+      expect(() => sonare({ minLength: 1, maxLength: 257 })).toThrow(RangeError);
+    });
+  });
 });

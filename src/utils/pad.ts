@@ -54,12 +54,12 @@ const PADDING_SYLLABLES = Object.freeze([
 ]);
 
 export function padToLength(s: string, min: number, max: number, rng: RandomGenerator): string {
-  function pad(current: string, state: RandomGenerator): string {
-    if (current.length >= min) {
-      return current.length > max ? current.slice(0, max) : current;
-    }
+  let current = s;
+  let state = rng;
+  while (current.length < min) {
     const [syll, next] = pick(PADDING_SYLLABLES)(state);
-    return pad(current + syll, next);
+    current = current + syll;
+    state = next;
   }
-  return pad(s, rng);
+  return current.length > max ? current.slice(0, max) : current;
 }
