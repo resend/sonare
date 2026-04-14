@@ -31,6 +31,14 @@ describe('sonare', () => {
     expect(allValid).toBe(true);
   });
 
+  it('handles null options without throwing', () => {
+    const word = sonare(null);
+    expect(word).toBeDefined();
+    expect(typeof word).toBe('string');
+    expect(word.length).toBeGreaterThanOrEqual(6);
+    expect(word.length).toBeLessThanOrEqual(10);
+  });
+
   it('generates unique words (high probability)', () => {
     const words = Array.from({ length: 1000 }, () => sonare());
     const uniqueWords = new Set(words);

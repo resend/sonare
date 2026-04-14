@@ -9,8 +9,8 @@ export interface SonareOptions {
 
 const state = { counter: 0, lastTime: 0 };
 
-export function sonare(options: SonareOptions = {}): string {
-  const { minLength = 6, maxLength = 10 } = options;
+export function sonare(options?: SonareOptions | null): string {
+  const { minLength = 6, maxLength = 10 } = options ?? {};
   const now = Date.now();
 
   if (now === state.lastTime) {
