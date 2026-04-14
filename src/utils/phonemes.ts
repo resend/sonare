@@ -177,7 +177,6 @@ export const TAILS = Object.freeze([
   'vion',
   'riel',
   'mar',
-  'vra',
   'ka',
   'ko',
   'ki',
