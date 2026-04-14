@@ -11,7 +11,4 @@ export function validateLengths(min: number, max: number): void {
   if (min > max) {
     throw new RangeError('minLength must be less than or equal to maxLength');
   }
-  if (max > 256) {
-    throw new RangeError('maxLength must be at most 256');
-  }
 }
