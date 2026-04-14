@@ -71,6 +71,5 @@ describe('sonare', () => {
     it('throws RangeError when minLength > maxLength', () => {
       expect(() => sonare({ minLength: 12, maxLength: 8 })).toThrow(RangeError);
     });
-
   });
 });

@@ -92,7 +92,7 @@ describe('string', () => {
     });
 
     it('preserves content at the start of string', () => {
-      const input = 'important' + 'x'.repeat(100);
+      const input = `important${'x'.repeat(100)}`;
       const trimmed = trimLabel(input);
       expect(trimmed.startsWith('important')).toBe(true);
       expect(trimmed.length).toBe(63);
@@ -119,7 +119,7 @@ describe('string', () => {
     });
 
     it('works with mixed content', () => {
-      const mixed = 'Test-123_ABC' + 'padding'.repeat(20);
+      const mixed = `Test-123_ABC${'padding'.repeat(20)}`;
       const trimmed = trimLabel(mixed);
       expect(trimmed.length).toBe(63);
       expect(trimmed.startsWith('Test-123_ABC')).toBe(true);
