@@ -1,6 +1,7 @@
 import { generateName } from './utils/generator';
 import { hashSeed } from './utils/hash';
 import { createRng } from './utils/rng';
+import { validateLengths } from './utils/validate';
 
 export interface SonareOptions {
   readonly minLength?: number;
@@ -9,8 +10,9 @@ export interface SonareOptions {
 
 const state = { counter: 0, lastTime: 0 };
 
-export function sonare(options?: SonareOptions | null): string {
-  const { minLength = 6, maxLength = 10 } = options ?? {};
+export function sonare(options: SonareOptions = {}): string {
+  const { minLength = 6, maxLength = 10 } = options;
+  validateLengths(minLength, maxLength);
   const now = Date.now();
 
   if (now === state.lastTime) {
