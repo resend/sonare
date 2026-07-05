@@ -132,7 +132,6 @@ export const RIMES = Object.freeze([
   'ild',
   'old',
   'uld',
-  'ech',
   'amb',
 ]);
 
@@ -175,7 +174,6 @@ export const CODAS = Object.freeze([
   'g',
   'b',
   'f',
-  'v',
   'z',
 ]);
 

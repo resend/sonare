@@ -29,4 +29,16 @@ describe('phoneme arrays', () => {
   it('RIMES contains only vowel-initial entries', () => {
     expect(RIMES.filter((rime) => !/^[aeiou]/.test(rime))).toEqual([]);
   });
+
+  it('CODAS contains only letters legal at word end', () => {
+    expect(CODAS.filter((coda) => /[jqwhv]/.test(coda))).toEqual([]);
+  });
+
+  it('RIMES contains only entries legal at word end', () => {
+    expect(RIMES.filter((rime) => /[jqwhv]$/.test(rime))).toEqual([]);
+  });
+
+  it('TAILS contains only entries legal at word end', () => {
+    expect(TAILS.filter((tail) => /[jqwhv]$/.test(tail))).toEqual([]);
+  });
 });
