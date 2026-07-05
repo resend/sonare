@@ -8,10 +8,12 @@ describe('pattern', () => {
       expect(PATTERNS).toContain('ON+T');
       expect(PATTERNS).toContain('ON+NU+T');
       expect(PATTERNS).toContain('CV');
+      expect(PATTERNS).toContain('CR');
       expect(PATTERNS).toContain('CVC');
       expect(PATTERNS).toContain('CVT');
       expect(PATTERNS).toContain('CVCV');
       expect(PATTERNS).toContain('CVCT');
+      expect(PATTERNS).toContain('CVCR');
       expect(PATTERNS).toContain('CVCVC');
       expect(PATTERNS).toContain('VCVCV');
       expect(PATTERNS).toContain('CVCVT');
@@ -35,7 +37,7 @@ describe('pattern', () => {
 
     it('has expected total weight', () => {
       const total = WEIGHTS.reduce((a, b) => a + b, 0);
-      expect(total).toBe(31);
+      expect(total).toBe(34);
     });
   });
 
@@ -107,6 +109,16 @@ describe('pattern', () => {
       });
     });
 
+    describe('pattern: CR', () => {
+      it('generates valid output', () => {
+        const rng = createRng(555);
+        const [result] = buildPattern('CR', rng);
+
+        expect(typeof result).toBe('string');
+        expect(result.length).toBeGreaterThan(0);
+      });
+    });
+
     describe('pattern: CVC', () => {
       it('generates valid output', () => {
         const rng = createRng(555);
@@ -141,6 +153,16 @@ describe('pattern', () => {
       it('generates valid output', () => {
         const rng = createRng(555);
         const [result] = buildPattern('CVCT', rng);
+
+        expect(typeof result).toBe('string');
+        expect(result.length).toBeGreaterThan(0);
+      });
+    });
+
+    describe('pattern: CVCR', () => {
+      it('generates valid output', () => {
+        const rng = createRng(555);
+        const [result] = buildPattern('CVCR', rng);
 
         expect(typeof result).toBe('string');
         expect(result.length).toBeGreaterThan(0);
@@ -241,10 +263,12 @@ describe('pattern', () => {
         'ON+T',
         'ON+NU+T',
         'CV',
+        'CR',
         'CVC',
         'CVT',
         'CVCV',
         'CVCT',
+        'CVCR',
         'CVCVC',
         'VCVCV',
         'CVCVT',
