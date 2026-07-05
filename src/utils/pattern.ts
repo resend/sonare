@@ -1,7 +1,6 @@
+import { joinSegments } from './join-segments';
 import { CODAS, NUCLEI, ONSETS, RIMES, TAILS } from './phonemes';
-import { pick } from './pick';
 import type { RandomGenerator } from './rng';
-import { sequence } from './sequence';
 
 export type Pattern =
   | 'ON+T'
@@ -42,51 +41,26 @@ export const PATTERNS: readonly Pattern[] = [
 
 export const WEIGHTS: readonly number[] = [4, 3, 1, 1, 1, 2, 3, 3, 2, 2, 2, 2, 2, 2, 2, 2];
 
-export function buildPattern(
+const PATTERN_SEGMENTS: Readonly<Record<Pattern, readonly (readonly string[])[]>> = {
+  'ON+T': [ONSETS, TAILS],
+  'ON+NU+T': [ONSETS, NUCLEI, TAILS],
+  CV: [ONSETS, NUCLEI],
+  CR: [ONSETS, RIMES],
+  CVC: [ONSETS, NUCLEI, CODAS],
+  CVT: [ONSETS, NUCLEI, TAILS],
+  CVCV: [ONSETS, NUCLEI, ONSETS, NUCLEI],
+  CVCT: [ONSETS, NUCLEI, CODAS, TAILS],
+  CVCR: [ONSETS, NUCLEI, ONSETS, RIMES],
+  CVCVC: [ONSETS, NUCLEI, ONSETS, NUCLEI, CODAS],
+  VCVCV: [NUCLEI, ONSETS, NUCLEI, ONSETS, NUCLEI],
+  CVCVT: [ONSETS, NUCLEI, ONSETS, NUCLEI, TAILS],
+  CVCTV: [ONSETS, NUCLEI, CODAS, TAILS, NUCLEI],
+  CVCVCT: [ONSETS, NUCLEI, ONSETS, NUCLEI, CODAS, TAILS],
+  VCVCVC: [NUCLEI, ONSETS, NUCLEI, ONSETS, NUCLEI, CODAS],
+  CVCVCV: [ONSETS, NUCLEI, ONSETS, NUCLEI, ONSETS, NUCLEI],
+};
+
+export const buildPattern = (
   pattern: Pattern,
   rng: RandomGenerator,
-): readonly [string, RandomGenerator] {
-  switch (pattern) {
-    case 'ON+T':
-      return sequence([pick(ONSETS), pick(TAILS)], rng);
-    case 'ON+NU+T':
-      return sequence([pick(ONSETS), pick(NUCLEI), pick(TAILS)], rng);
-    case 'CV':
-      return sequence([pick(ONSETS), pick(NUCLEI)], rng);
-    case 'CR':
-      return sequence([pick(ONSETS), pick(RIMES)], rng);
-    case 'CVC':
-      return sequence([pick(ONSETS), pick(NUCLEI), pick(CODAS)], rng);
-    case 'CVT':
-      return sequence([pick(ONSETS), pick(NUCLEI), pick(TAILS)], rng);
-    case 'CVCV':
-      return sequence([pick(ONSETS), pick(NUCLEI), pick(ONSETS), pick(NUCLEI)], rng);
-    case 'CVCT':
-      return sequence([pick(ONSETS), pick(NUCLEI), pick(CODAS), pick(TAILS)], rng);
-    case 'CVCR':
-      return sequence([pick(ONSETS), pick(NUCLEI), pick(ONSETS), pick(RIMES)], rng);
-    case 'CVCVC':
-      return sequence([pick(ONSETS), pick(NUCLEI), pick(ONSETS), pick(NUCLEI), pick(CODAS)], rng);
-    case 'VCVCV':
-      return sequence([pick(NUCLEI), pick(ONSETS), pick(NUCLEI), pick(ONSETS), pick(NUCLEI)], rng);
-    case 'CVCVT':
-      return sequence([pick(ONSETS), pick(NUCLEI), pick(ONSETS), pick(NUCLEI), pick(TAILS)], rng);
-    case 'CVCTV':
-      return sequence([pick(ONSETS), pick(NUCLEI), pick(CODAS), pick(TAILS), pick(NUCLEI)], rng);
-    case 'CVCVCT':
-      return sequence(
-        [pick(ONSETS), pick(NUCLEI), pick(ONSETS), pick(NUCLEI), pick(CODAS), pick(TAILS)],
-        rng,
-      );
-    case 'VCVCVC':
-      return sequence(
-        [pick(NUCLEI), pick(ONSETS), pick(NUCLEI), pick(ONSETS), pick(NUCLEI), pick(CODAS)],
-        rng,
-      );
-    case 'CVCVCV':
-      return sequence(
-        [pick(ONSETS), pick(NUCLEI), pick(ONSETS), pick(NUCLEI), pick(ONSETS), pick(NUCLEI)],
-        rng,
-      );
-  }
-}
+): readonly [string, RandomGenerator] => joinSegments(PATTERN_SEGMENTS[pattern], rng);

@@ -1,6 +1,18 @@
 import { describe, expect, it } from 'vitest';
+import { INITIAL_CLUSTERS } from './clusters';
 import { buildPattern, PATTERNS, type Pattern, WEIGHTS } from './pattern';
 import { createRng } from './rng';
+
+const LEGAL_FINAL_CLUSTERS = new Set(['lk', 'rk', 'st', 'nt', 'ld', 'mb']);
+
+const sampleWords = (pattern: Pattern, count: number): readonly string[] =>
+  Array.from({ length: count }, (_, i) => {
+    const [word] = buildPattern(pattern, createRng(i));
+    return word;
+  });
+
+const allSampledWords = (count: number): readonly string[] =>
+  PATTERNS.flatMap((pattern) => sampleWords(pattern, count));
 
 describe('pattern', () => {
   describe('PATTERNS', () => {
@@ -256,6 +268,38 @@ describe('pattern', () => {
         const [result] = buildPattern(pattern, rng);
         expect(/^[a-z]+$/.test(result)).toBe(true);
       }
+    });
+
+    describe('seam-aware joining', () => {
+      it('never starts a word with an illegal consonant cluster', () => {
+        const offenders = allSampledWords(500).filter((word) => {
+          const run = word.match(/^[^aeiou]+/)?.[0] ?? '';
+          return run.length >= 2 && !INITIAL_CLUSTERS.has(run);
+        });
+
+        expect(offenders).toEqual([]);
+      });
+
+      it('never ends a word with an illegal consonant cluster', () => {
+        const offenders = allSampledWords(500).filter((word) => {
+          const run = word.match(/[^aeiou]+$/)?.[0] ?? '';
+          return run.length >= 2 && !LEGAL_FINAL_CLUSTERS.has(run);
+        });
+
+        expect(offenders).toEqual([]);
+      });
+
+      it('never ends a word in j, q, w, h, or v', () => {
+        expect(allSampledWords(500).filter((word) => /[jqwhv]$/.test(word))).toEqual([]);
+      });
+
+      it('never produces a run of three or more vowels', () => {
+        expect(allSampledWords(500).filter((word) => /[aeiou]{3,}/.test(word))).toEqual([]);
+      });
+
+      it('never produces aa, ii, or uu', () => {
+        expect(allSampledWords(500).filter((word) => /aa|ii|uu/.test(word))).toEqual([]);
+      });
     });
 
     it('handles all patterns consistently', () => {

@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { INITIAL_CLUSTERS } from './clusters';
 import { generateName } from './generator';
 import { createRng } from './rng';
 
@@ -140,6 +141,19 @@ describe('generator', () => {
 
       expect(/^[a-z]+$/.test(name)).toBe(true);
       expect(name).toBe(name.toLowerCase());
+    });
+
+    it('never starts a name with an illegal consonant cluster', () => {
+      const config = { minLength: 6, maxLength: 10 };
+      const offenders = Array.from({ length: 5000 }, (_, i) => {
+        const [name] = generateName(createRng(i), config);
+        return name;
+      }).filter((name) => {
+        const run = name.match(/^[^aeiou]+/)?.[0] ?? '';
+        return run.length >= 2 && !INITIAL_CLUSTERS.has(run);
+      });
+
+      expect(offenders).toEqual([]);
     });
 
     it('generates high-quality unique names', () => {
