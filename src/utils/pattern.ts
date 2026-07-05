@@ -1,4 +1,4 @@
-import { CODAS, NUCLEI, ONSETS, TAILS } from './phonemes';
+import { CODAS, NUCLEI, ONSETS, RIMES, TAILS } from './phonemes';
 import { pick } from './pick';
 import type { RandomGenerator } from './rng';
 import { sequence } from './sequence';
@@ -7,10 +7,12 @@ export type Pattern =
   | 'ON+T'
   | 'ON+NU+T'
   | 'CV'
+  | 'CR'
   | 'CVC'
   | 'CVT'
   | 'CVCV'
   | 'CVCT'
+  | 'CVCR'
   | 'CVCVC'
   | 'VCVCV'
   | 'CVCVT'
@@ -23,10 +25,12 @@ export const PATTERNS: readonly Pattern[] = [
   'ON+T',
   'ON+NU+T',
   'CV',
+  'CR',
   'CVC',
   'CVT',
   'CVCV',
   'CVCT',
+  'CVCR',
   'CVCVC',
   'VCVCV',
   'CVCVT',
@@ -36,7 +40,7 @@ export const PATTERNS: readonly Pattern[] = [
   'CVCVCV',
 ];
 
-export const WEIGHTS: readonly number[] = [4, 3, 1, 1, 2, 3, 3, 2, 2, 2, 2, 2, 2, 2];
+export const WEIGHTS: readonly number[] = [4, 3, 1, 1, 1, 2, 3, 3, 2, 2, 2, 2, 2, 2, 2, 2];
 
 export function buildPattern(
   pattern: Pattern,
@@ -49,6 +53,8 @@ export function buildPattern(
       return sequence([pick(ONSETS), pick(NUCLEI), pick(TAILS)], rng);
     case 'CV':
       return sequence([pick(ONSETS), pick(NUCLEI)], rng);
+    case 'CR':
+      return sequence([pick(ONSETS), pick(RIMES)], rng);
     case 'CVC':
       return sequence([pick(ONSETS), pick(NUCLEI), pick(CODAS)], rng);
     case 'CVT':
@@ -57,6 +63,8 @@ export function buildPattern(
       return sequence([pick(ONSETS), pick(NUCLEI), pick(ONSETS), pick(NUCLEI)], rng);
     case 'CVCT':
       return sequence([pick(ONSETS), pick(NUCLEI), pick(CODAS), pick(TAILS)], rng);
+    case 'CVCR':
+      return sequence([pick(ONSETS), pick(NUCLEI), pick(ONSETS), pick(RIMES)], rng);
     case 'CVCVC':
       return sequence([pick(ONSETS), pick(NUCLEI), pick(ONSETS), pick(NUCLEI), pick(CODAS)], rng);
     case 'VCVCV':
