@@ -43,6 +43,8 @@ const computeCandidates = (minLength: number, maxLength: number): Candidates => 
     : { patterns: PATTERNS, weights: WEIGHTS };
 };
 
+const CACHE_LIMIT = 128;
+
 const candidateCache = new Map<string, Candidates>();
 
 const candidatesFor = (minLength: number, maxLength: number): Candidates => {
@@ -50,6 +52,10 @@ const candidatesFor = (minLength: number, maxLength: number): Candidates => {
   const cached = candidateCache.get(key);
   if (cached) return cached;
   const computed = computeCandidates(minLength, maxLength);
+  const oldestKey = candidateCache.keys().next().value;
+  if (candidateCache.size >= CACHE_LIMIT && oldestKey !== undefined) {
+    candidateCache.delete(oldestKey);
+  }
   candidateCache.set(key, computed);
   return computed;
 };

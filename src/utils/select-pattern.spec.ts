@@ -65,5 +65,17 @@ describe('select-pattern', () => {
       const [pattern] = selectPattern(1, 1, createRng(42));
       expect(PATTERNS).toContain(pattern);
     });
+
+    it('stays deterministic after the candidate cache evicts entries', () => {
+      const [before] = selectPattern(6, 10, createRng(42));
+      const flood = Array.from({ length: 300 }, (_, index) => {
+        const [pattern] = selectPattern(index + 1, index + 2, createRng(index));
+        return pattern;
+      });
+      const [after] = selectPattern(6, 10, createRng(42));
+
+      expect(flood.every((pattern) => PATTERNS.includes(pattern))).toBe(true);
+      expect(after).toBe(before);
+    });
   });
 });
