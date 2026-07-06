@@ -1,8 +1,7 @@
 import { FINAL_CLUSTERS } from './clusters';
+import { trailingConsonantRun } from './trailing-consonant-run';
 
 const ILLEGAL_FINAL_LETTERS: ReadonlySet<string> = new Set(['j', 'q', 'w', 'h', 'v']);
-
-const trailingConsonantRun = (s: string): string => s.match(/[^aeiou]+$/)?.[0] ?? '';
 
 const hasLegalEnding = (word: string): boolean => {
   if (word.endsWith('qu')) return false;
