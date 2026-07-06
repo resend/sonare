@@ -17,13 +17,15 @@ const sampleLengths = (pattern: Pattern): readonly number[] =>
 
 const statsFor = (pattern: Pattern): LengthStats => {
   const lengths = sampleLengths(pattern);
-  return {
+  return Object.freeze({
     mean: lengths.reduce((sum, length) => sum + length, 0) / lengths.length,
-    cumulative: Array.from(
-      { length: MAX_TRACKED_LENGTH + 1 },
-      (_, bound) => lengths.filter((length) => length <= bound).length / lengths.length,
+    cumulative: Object.freeze(
+      Array.from(
+        { length: MAX_TRACKED_LENGTH + 1 },
+        (_, bound) => lengths.filter((length) => length <= bound).length / lengths.length,
+      ),
     ),
-  };
+  });
 };
 
 export const PATTERN_LENGTH_STATS: Readonly<Record<Pattern, LengthStats>> = Object.freeze(
