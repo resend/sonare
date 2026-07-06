@@ -1,1 +1,1 @@
-export const isVowel = (char: string): boolean => 'aeiou'.includes(char);
+export const isVowel = (char: string): boolean => char.length === 1 && 'aeiou'.includes(char);
