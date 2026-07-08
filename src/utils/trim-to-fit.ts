@@ -15,5 +15,5 @@ export const trimToFit = (word: string, maxLength: number): string => {
   const prefixes = Array.from({ length: maxLength }, (_, index) =>
     word.slice(0, maxLength - index),
   );
-  return prefixes.find(hasLegalEnding) ?? word.slice(0, maxLength);
+  return prefixes.find(hasLegalEnding) ?? '';
 };

@@ -51,8 +51,19 @@ describe('trim-to-fit', () => {
       expect(offenders).toEqual([]);
     });
 
-    it('falls back to a plain slice when no prefix ends legally', () => {
-      expect(trimToFit('whanere', 2)).toBe('wh');
+    it('returns an empty string when no prefix ends legally', () => {
+      expect(trimToFit('whanere', 2)).toBe('');
+    });
+
+    it('never returns an illegal ending for any max length', () => {
+      const words = ['whanere', 'valonteska', 'quenarivo', 'jorvexulda'];
+      const offenders = words.flatMap((word) =>
+        Array.from({ length: word.length - 1 }, (_, index) => trimToFit(word, index + 1)).filter(
+          (trimmed) => trimmed !== '' && hasIllegalEnding(trimmed),
+        ),
+      );
+
+      expect(offenders).toEqual([]);
     });
   });
 });
