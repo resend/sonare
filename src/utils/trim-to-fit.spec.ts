@@ -3,6 +3,7 @@ import { FINAL_CLUSTERS } from './clusters';
 import { trimToFit } from './trim-to-fit';
 
 const hasIllegalEnding = (word: string): boolean => {
+  if (word.endsWith('qu')) return true;
   if (/[jqwhv]$/.test(word)) return true;
   const run = word.match(/[^aeiou]+$/)?.[0] ?? '';
   return run.length >= 2 && !FINAL_CLUSTERS.has(run);
