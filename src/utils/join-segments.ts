@@ -1,4 +1,5 @@
 import { canJoin } from './can-join';
+import { isVowel } from './is-vowel';
 import { pick } from './pick';
 import type { RandomGenerator } from './rng';
 
@@ -22,8 +23,6 @@ const QU_LINKING_BRIDGES = Object.freeze([
   'on',
   'or',
 ]);
-
-const isVowel = (char: string): boolean => 'aeiou'.includes(char);
 
 const linkPool = (word: string, segment: string): readonly string[] => {
   const firstChar = segment[0];

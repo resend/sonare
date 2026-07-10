@@ -39,6 +39,8 @@ export const INITIAL_CLUSTERS: ReadonlySet<string> = new Set([
   'str',
 ]);
 
+export const FINAL_CLUSTERS: ReadonlySet<string> = new Set(['lk', 'rk', 'st', 'nt', 'ld', 'mb']);
+
 export const MEDIAL_CLUSTERS: ReadonlySet<string> = new Set([
   'bl',
   'br',

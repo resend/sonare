@@ -1,16 +1,14 @@
 import { INITIAL_CLUSTERS, MEDIAL_CLUSTERS } from './clusters';
+import { isVowel } from './is-vowel';
+import { trailingConsonantRun } from './trailing-consonant-run';
 
 const BANNED_VOWEL_PAIRS: ReadonlySet<string> = new Set(['aa', 'ii', 'uu']);
-
-const isVowel = (char: string): boolean => 'aeiou'.includes(char);
 
 const leadingVowelRun = (s: string): string => s.match(/^[aeiou]+/)?.[0] ?? '';
 
 const trailingVowelRun = (s: string): string => s.match(/[aeiou]+$/)?.[0] ?? '';
 
 const leadingConsonantRun = (s: string): string => s.match(/^[^aeiou]+/)?.[0] ?? '';
-
-const trailingConsonantRun = (s: string): string => s.match(/[^aeiou]+$/)?.[0] ?? '';
 
 export const canJoin = (left: string, right: string): boolean => {
   if (left === '' || right === '') return true;

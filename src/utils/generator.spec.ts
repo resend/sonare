@@ -1,7 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { INITIAL_CLUSTERS } from './clusters';
+import { FINAL_CLUSTERS, INITIAL_CLUSTERS } from './clusters';
 import { generateName } from './generator';
+import { buildPattern } from './pattern';
 import { createRng } from './rng';
+import { selectPattern } from './select-pattern';
+import { normalize } from './string';
 
 describe('generator', () => {
   describe('generateName', () => {
@@ -167,6 +170,40 @@ describe('generator', () => {
       }
 
       expect(names.size).toBeGreaterThan(9500);
+    });
+
+    it('never ends a name with an illegal cluster or naked q', () => {
+      const config = { minLength: 6, maxLength: 10 };
+      const offenders = Array.from({ length: 20000 }, (_, i) => {
+        const [name] = generateName(createRng(i), config);
+        return name;
+      }).filter((name) => {
+        const run = name.match(/[^aeiou]+$/)?.[0] ?? '';
+        return (run.length >= 2 && !FINAL_CLUSTERS.has(run)) || /[jqwhv]$/.test(name);
+      });
+
+      expect(offenders).toEqual([]);
+    });
+
+    it('rarely picks patterns that overshoot maxLength', () => {
+      const config = { minLength: 6, maxLength: 10 };
+      const overshoots = Array.from({ length: 20000 }, (_, i) => {
+        const [pattern, rng1] = selectPattern(config.minLength, config.maxLength, createRng(i));
+        const [base] = buildPattern(pattern, rng1);
+        return normalize(base).length;
+      }).filter((length) => length > config.maxLength);
+
+      expect(overshoots.length / 20000).toBeLessThan(0.1);
+    });
+
+    it('does not pile words up at exactly maxLength', () => {
+      const config = { minLength: 6, maxLength: 10 };
+      const atMax = Array.from({ length: 20000 }, (_, i) => {
+        const [name] = generateName(createRng(i), config);
+        return name;
+      }).filter((name) => name.length === config.maxLength);
+
+      expect(atMax.length / 20000).toBeLessThan(0.3);
     });
   });
 });

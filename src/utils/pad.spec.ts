@@ -23,13 +23,23 @@ describe('pad', () => {
       expect(result.length).toBe(8);
     });
 
-    it('truncates strings longer than max length', () => {
+    it('trims strings longer than max length at a legal boundary', () => {
       const input = 'verylongstring';
       const rng = createRng(777);
       const result = padToLength(input, 5, 10, rng);
 
+      expect(result.length).toBeLessThanOrEqual(10);
+      expect(result).toBe('verylon');
+    });
+
+    it('pads back up when boundary trimming drops below min', () => {
+      const input = 'velaquendrio';
+      const rng = createRng(777);
+      const result = padToLength(input, 10, 10, rng);
+
       expect(result.length).toBe(10);
-      expect(result).toBe('verylongst');
+      expect(result.startsWith('velaquen')).toBe(true);
+      expect(result.endsWith('q')).toBe(false);
     });
 
     it('respects exact minimum length', () => {

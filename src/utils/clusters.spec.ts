@@ -1,9 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { INITIAL_CLUSTERS, MEDIAL_CLUSTERS } from './clusters';
+import { FINAL_CLUSTERS, INITIAL_CLUSTERS, MEDIAL_CLUSTERS } from './clusters';
 
 describe('cluster whitelists', () => {
   it.each([
     ['INITIAL_CLUSTERS', INITIAL_CLUSTERS],
+    ['FINAL_CLUSTERS', FINAL_CLUSTERS],
     ['MEDIAL_CLUSTERS', MEDIAL_CLUSTERS],
   ])('%s contains only lowercase consonant sequences', (_, clusters) => {
     expect([...clusters].filter((cluster) => !/^[b-df-hj-np-tv-z]+$/.test(cluster))).toEqual([]);
@@ -11,9 +12,16 @@ describe('cluster whitelists', () => {
 
   it.each([
     ['INITIAL_CLUSTERS', INITIAL_CLUSTERS],
+    ['FINAL_CLUSTERS', FINAL_CLUSTERS],
     ['MEDIAL_CLUSTERS', MEDIAL_CLUSTERS],
   ])('%s contains only clusters of two or three consonants', (_, clusters) => {
     expect([...clusters].filter((cluster) => cluster.length < 2 || cluster.length > 3)).toEqual([]);
+  });
+
+  it('FINAL_CLUSTERS excludes clusters English never ends words with', () => {
+    expect(FINAL_CLUSTERS.has('dr')).toBe(false);
+    expect(FINAL_CLUSTERS.has('gt')).toBe(false);
+    expect(FINAL_CLUSTERS.has('zgr')).toBe(false);
   });
 
   it('INITIAL_CLUSTERS excludes clusters English never starts words with', () => {

@@ -1,9 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { INITIAL_CLUSTERS } from './clusters';
+import { FINAL_CLUSTERS, INITIAL_CLUSTERS } from './clusters';
 import { buildPattern, PATTERNS, type Pattern, WEIGHTS } from './pattern';
 import { createRng } from './rng';
-
-const LEGAL_FINAL_CLUSTERS = new Set(['lk', 'rk', 'st', 'nt', 'ld', 'mb']);
 
 const sampleWords = (pattern: Pattern, count: number): readonly string[] =>
   Array.from({ length: count }, (_, i) => {
@@ -283,7 +281,7 @@ describe('pattern', () => {
       it('never ends a word with an illegal consonant cluster', () => {
         const offenders = allSampledWords(500).filter((word) => {
           const run = word.match(/[^aeiou]+$/)?.[0] ?? '';
-          return run.length >= 2 && !LEGAL_FINAL_CLUSTERS.has(run);
+          return run.length >= 2 && !FINAL_CLUSTERS.has(run);
         });
 
         expect(offenders).toEqual([]);
