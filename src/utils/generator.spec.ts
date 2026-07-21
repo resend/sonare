@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { FINAL_CLUSTERS, INITIAL_CLUSTERS } from './clusters';
 import { generateName } from './generator';
+import { isPronounceable } from './is-pronounceable';
 import { buildPattern } from './pattern';
 import { createRng } from './rng';
 import { selectPattern } from './select-pattern';
@@ -204,6 +205,66 @@ describe('generator', () => {
       }).filter((name) => name.length === config.maxLength);
 
       expect(atMax.length / 20000).toBeLessThan(0.3);
+    });
+
+    it('generates only pronounceable words at default lengths', () => {
+      const config = { minLength: 6, maxLength: 10 };
+      const offenders = Array.from({ length: 50000 }, (_, i) => {
+        const [name] = generateName(createRng(i), config);
+        return name;
+      }).filter((name) => !isPronounceable(name));
+
+      expect(offenders).toEqual([]);
+    });
+
+    it('generates only pronounceable words at short lengths', () => {
+      const config = { minLength: 4, maxLength: 6 };
+      const offenders = Array.from({ length: 50000 }, (_, i) => {
+        const [name] = generateName(createRng(i), config);
+        return name;
+      }).filter((name) => !isPronounceable(name));
+
+      expect(offenders).toEqual([]);
+    });
+
+    it('generates only pronounceable words at long lengths', () => {
+      const config = { minLength: 10, maxLength: 15 };
+      const offenders = Array.from({ length: 50000 }, (_, i) => {
+        const [name] = generateName(createRng(i), config);
+        return name;
+      }).filter((name) => !isPronounceable(name));
+
+      expect(offenders).toEqual([]);
+    });
+
+    it('terminates and stays within bounds for pathological length combos', () => {
+      const configs = [
+        { minLength: 1, maxLength: 1 },
+        { minLength: 1, maxLength: 2 },
+        { minLength: 2, maxLength: 2 },
+      ];
+      const offenders = configs.flatMap((config) =>
+        Array.from({ length: 2000 }, (_, i) => {
+          const [name] = generateName(createRng(i), config);
+          return { name, config };
+        }).filter(
+          ({ name, config: { minLength, maxLength } }) =>
+            name.length < minLength || name.length > maxLength,
+        ),
+      );
+
+      expect(offenders).toEqual([]);
+    });
+
+    it('stays deterministic when the safety net retries', () => {
+      const config = { minLength: 1, maxLength: 1 };
+      const results = Array.from({ length: 500 }, (_, i) => {
+        const [first] = generateName(createRng(i), config);
+        const [second] = generateName(createRng(i), config);
+        return [first, second] as const;
+      }).filter(([first, second]) => first !== second);
+
+      expect(results).toEqual([]);
     });
   });
 });
