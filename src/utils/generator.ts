@@ -15,9 +15,7 @@ const MAX_GENERATION_ATTEMPTS = 16;
 const attemptName = (rng: RandomGenerator, cfg: Config): readonly [string, RandomGenerator] => {
   const [pattern, rng1] = selectPattern(cfg.minLength, cfg.maxLength, rng);
   const [base, rng2] = buildPattern(pattern, rng1);
-  const baseWord = padToLength(normalize(base), cfg.minLength, cfg.maxLength, rng2);
-
-  return [baseWord, rng2];
+  return padToLength(normalize(base), cfg.minLength, cfg.maxLength, rng2);
 };
 
 const retryUntilPronounceable = (
