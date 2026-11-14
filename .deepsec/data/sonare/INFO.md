@@ -5,14 +5,15 @@
 `sonare` is a zero-dependency TypeScript library, published to npm, that
 generates pronounceable pseudo-words. The whole public surface is one
 function, `sonare({ minLength, maxLength })`, returning a lowercase ASCII
-string. It is pure in-process computation: phoneme tables (`phonemes.ts`,
+string. All work happens in-process: phoneme tables (`phonemes.ts`,
 `clusters.ts`) are combined by weighted pattern selection
 (`select-pattern.ts`, `pattern.ts`), joined (`join-segments.ts`,
 `can-join.ts`), then padded or trimmed to the requested length (`pad.ts`,
-`trim-to-fit.ts`). Shipped code imports nothing outside `src/` and touches no
-network, filesystem, process, or environment API. There is no server and no
-CLI. The build is `tsup` (CJS + ESM); CI is two GitHub Actions workflows
-(build, lint).
+`trim-to-fit.ts`). It is not a pure function: every call reads `Date.now()`
+and `Math.random()` and updates module-level state. Shipped code imports
+nothing outside `src/` and touches no network, filesystem, process, or
+environment API. There is no server and no CLI. The build is `tsup` (CJS +
+ESM); CI is two GitHub Actions workflows (build, lint).
 
 ## Auth shape
 
