@@ -67,8 +67,13 @@ const paddingPool = (word: string, budget: number): readonly string[] => {
 
 const PADDING_STEP_LIMIT = 1024;
 
-const appendPadding = (word: string, min: number, max: number, rng: RandomGenerator): string => {
-  if (word.length >= min) return word;
+const appendPadding = (
+  word: string,
+  min: number,
+  max: number,
+  rng: RandomGenerator,
+): readonly [string, RandomGenerator] => {
+  if (word.length >= min) return [word, rng];
   const steps = Math.min(PADDING_STEP_LIMIT, min - word.length);
   const [padded, next] = Array.from({ length: steps }).reduce<readonly [string, RandomGenerator]>(
     ([current, state]) => {
@@ -81,5 +86,9 @@ const appendPadding = (word: string, min: number, max: number, rng: RandomGenera
   return appendPadding(padded, min, max, next);
 };
 
-export const padToLength = (s: string, min: number, max: number, rng: RandomGenerator): string =>
-  appendPadding(trimToFit(s, max), min, max, rng);
+export const padToLength = (
+  s: string,
+  min: number,
+  max: number,
+  rng: RandomGenerator,
+): readonly [string, RandomGenerator] => appendPadding(trimToFit(s, max), min, max, rng);
